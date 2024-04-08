@@ -5,12 +5,14 @@ import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
 import moment from "moment";
 import InputEmoji from "react-input-emoji";
+import { languageFlags } from "../../utils/flags";
 
 const ChatBox = () => {
     const {user} = useContext(AuthContext)
     const {currentChat, messages, isMessagesLoading, sendTextMessage} = useContext(ChatContext)
     const {recipientUser} = useFetchRecipientUser(currentChat, user);
     const [textMessage, setTextMessage] = useState("")
+    const [hoveredMessageId, setHoveredMessageId] = useState(null);
     const scroll = useRef();
 
 
@@ -35,21 +37,26 @@ const ChatBox = () => {
             <strong>{recipientUser.name}</strong>
         </div>
         <Stack gap={3} className="messages">
-            {messages && messages.map((message, index)=> (
-            <Stack key={index} className= {`${message?.senderId === user?._id 
+    {messages && messages.map((message, index) => (
+        <Stack key={index} className={`${message?.senderId === user?._id
             ? "message self align-self-end flex-grow-0" 
             : "message align-self-start flex-grow-0"
-            }`}
-            ref = {scroll}
-            
-            >
-                <span>{message.text}</span>
-                <span className="message-footer">
-                    {moment(message.createdAt).calendar()}
-                    </span>
-            </Stack>
-            ))}
+        }`}
+        ref={scroll}
+        onMouseEnter={() => setHoveredMessageId(message._id)}
+        onMouseLeave={() => setHoveredMessageId(null)}
+        >
+            {hoveredMessageId === message._id
+                ? <span>{`Original: ${message.ogLanguage} ${languageFlags[message.ogLanguage] || ''}`}</span>
+                : <span>{message.text}</span>
+            }
+            <span className="message-footer">
+                {moment(message.createdAt).calendar()}
+            </span>
         </Stack>
+    ))}
+</Stack>
+
         <Stack direction="horizontal" gap={3} className="chat-input flex-grow-0">
             <InputEmoji 
                 value={textMessage} 
