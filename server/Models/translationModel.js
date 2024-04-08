@@ -5,6 +5,7 @@ const translationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Message'
   },
+  ogLanguage: String,
   translations: {
     type: Map,
     of: String

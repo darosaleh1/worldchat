@@ -1,26 +1,8 @@
 const translationModel = require("../Models/translationModel")
-const {Translate} = require('@google-cloud/translate').v2;
-
-require("dotenv").config()
+const {translateText} = require("../google_translate")
 
 
-// setup translation API
 
-const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
-const translate = new Translate({
-    credentials: CREDENTIALS,
-    projectId: CREDENTIALS.project_id
-});
-
-// translate text via google cloud translation API
-const translateText = async (text, targetLanguage) => {
-    try {
-        let [response] = await translate.translate(text, targetLanguage);
-        return response;
-    } catch (error){
-        return 0;
-    }
-};
 
 //  check db for translation else create translation and update translation object
 const handleTranslation = async (req, res) => {

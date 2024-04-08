@@ -35,8 +35,10 @@ const translateText = async (text, targetLanguage) => {
     }
 };
 
-translateText('Je vais bien','en').then((res) => {
-    console.log(res);
-}).catch((err) => {
-    console.log(err);
-});
+// translateText('Je vais bien','en').then((res) => {
+//     console.log(res);
+// }).catch((err) => {
+//     console.log(err);
+// });
+
+module.exports = {translateText, detectLanguage}

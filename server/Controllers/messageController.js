@@ -1,12 +1,15 @@
 const messageModel = require("../Models/messageModel")
+const {detectLanguage} = require("../google_translate")
 
 //createMessage
 
 const createMessage = async(req, res) =>{
     const  {chatId, senderId, text} = req.body
+    const ogLanguage = await detectLanguage(text)
+    
     
     const message = new messageModel({
-        chatId, senderId, text
+        chatId, senderId, text, ogLanguage
     })
 
     try{

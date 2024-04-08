@@ -4,7 +4,8 @@ const translationModel = require("../Models/translationModel")
 const messageSchema = new mongoose.Schema({
     chatId: String,
     senderId: String,
-    text: String
+    text: String,
+    ogLanguage: String,
 },
 {
     timestamps: true
@@ -12,7 +13,7 @@ const messageSchema = new mongoose.Schema({
 
 messageSchema.post('save', function(doc, next){
     
-    translationModel.create({ messageId: doc._id, translations: {} })
+    translationModel.create({ messageId: doc._id, ogLanguage: doc._ogLanguage, translations: {} })
     .then(() => next())
     .catch(err => next(err));
 });
